@@ -1,0 +1,159 @@
+openapi: 3.0.3
+info:
+  title: Complexity Calculator API
+  description: 'API for assessing design complexity in custom spaces closet'
+  version: 1.5.1
+servers:
+  -   url: https://www.tstven.containerstore.com/preston-integrations/proposal-service/apps/closetpro/api/
+      description: Test Ven - Public access
+  -   url: https://www.containerstore.com/preston-integrations/proposal-service/apps/closetpro/api/
+      description: Prod
+security:
+  -   basicAuth: [ ]
+tags:
+  -   name: complexity
+      description: API to work with closetpro complexity calculator within TCS services
+paths:
+  /v1/complexity/calculator/get-complexity:
+    post:
+      tags:
+        - complexity
+      summary: 'Consumed by services to get design complexity'
+      description: 'Consumed by services to get design complexity'
+      operationId: 'calculateComplexity'
+      requestBody:
+        description: 'Produces design complexity for custom spaces'
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ComplexityCalculatorRequest'
+            example:
+              opportunityId: 12345
+              customerAddress:
+                address1: Some Apartment 3
+                address2: That building, This Block
+                city: Brooklyn
+                state: NY
+                zipCode: '10328'
+              storeAddress:
+                address1: Staten Island
+                address2: 283 Platinum Ave
+                city: Staten Island
+                state: NY
+                zipCode: '10314'
+              Job:
+                Rooms:
+                  Room:
+                    - Closets:
+                        Closet:
+                          Components:
+                            Component:
+                              - Lighting
+                              - 360 Spinner
+                              - Continuous Base
+                              - Drawers
+                          Layout: Stacked solutions
+                          TypeOfSpace: Garage
+                          SpaceID: ABC123
+                    - Closets:
+                        Closet:
+                          - Components:
+                              Component:
+                            Layout: Suspended or hanging shelving
+                            TypeOfSpace: Closet
+                            SpaceID: ABC234
+                          - Components:
+                              Component:
+                                - Lighting
+                                - 360 Spinner
+                                - Continuous Base
+                                - Drawers
+                            Layout: Stacked solutions
+                            TypeOfSpace: Home Office
+                            SpaceID: ABC231
+        required: true
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComplexityCalculatorResponse'
+              example:
+                Job:
+                  Rooms:
+                    Room:
+                      - Closets:
+                          Closet:
+                            - Complexity: '5'
+                              SpaceID: ABC123
+                      - Closets:
+                          Closet:
+                            - Complexity: '1'
+                              SpaceID: ABC234
+                            - Complexity: '5'
+                              SpaceID: ABC231
+                  OpportunityID: '12345'
+        '400':
+          description: Bad Request/Invalid input
+        '500':
+          description: Internal server error
+components:
+  schemas:
+    ComplexityCalculatorRequest:
+      required:
+        - Job
+      type: object
+      properties:
+        Job:
+          $ref: '#/components/schemas/Job'
+    Job:
+      type: object
+      properties:
+        Rooms:
+          type: object
+          properties:
+            Room:
+              type: array
+              items:
+                type: object
+                properties:
+                  Closets:
+                    $ref: '#/components/schemas/Closets'
+    Closets:
+      type: object
+      properties:
+        Closet:
+          type: array
+          items:
+            type: object
+            properties:
+              SpaceID:
+                type: string
+                minLength: 1
+              TypeOfSpace:
+                type: string
+              Layout:
+                type: string
+              Complexity:
+                type: string
+              Components:
+                $ref: '#/components/schemas/Components'
+    Components:
+      type: object
+      properties:
+        Component:
+          type: array
+          items:
+            type: object
+            properties:
+              description:
+                type: string
+                minLength: 1
+    ComplexityCalculatorResponse:
+      required:
+        - Job
+      type: object
+      properties:
+        Job:
+          $ref: '#/components/schemas/Job'
