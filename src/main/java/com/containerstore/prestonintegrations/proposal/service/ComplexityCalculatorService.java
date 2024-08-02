@@ -64,7 +64,7 @@ public class ComplexityCalculatorService {
                 return true;
             }
         }
-        return true;
+        return false;
     }
 
     public List<ComplexityComponents> getAllComponents(){
