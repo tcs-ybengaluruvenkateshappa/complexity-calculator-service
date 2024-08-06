@@ -1,6 +1,7 @@
 package com.containerstore.prestonintegrations.proposal.repository;
 
 import com.containerstore.prestonintegrations.proposal.entity.ComplexityComponents;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -13,5 +14,6 @@ import java.util.UUID;
 public interface ComplexityComponentsRepository extends JpaRepository<ComplexityComponents, UUID> {
 
     @Query("SELECT c.component_value FROM ComplexityComponents c WHERE c.complexity = :complexity")
-    List<String> getComponentValueByComplexity(@Param("complexity") int complexityValue);
+    @Cacheable(cacheNames = "complexity_value", key = "#complexityValue")
+    List<String> getComponentValueByComplexity(@Param("complexity") Integer complexityValue);
 }

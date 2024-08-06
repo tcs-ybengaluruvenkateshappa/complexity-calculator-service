@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: ComplexityCalculatorApplication
+    maxcomplexity: 5
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/complexity_calculator
+    username: postgres
+    password: root
+  jpa:
+    show-sql: true
