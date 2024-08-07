@@ -2,6 +2,7 @@ package com.containerstore.prestonintegrations.proposal.service;
 
 import com.containerstore.prestonintegrations.proposal.entity.ComplexityComponents;
 import com.containerstore.prestonintegrations.proposal.repository.ComplexityComponentsRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -10,6 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
+@Slf4j
 public class ComplexityCalculatorService {
 
     @Value("${spring.application.maxcomplexity}")
@@ -44,9 +46,10 @@ public class ComplexityCalculatorService {
         int currentComplexityCount = maxComplexity;
 
         try {
-            while(currentComplexityCount > 0){
-                boolean isCurrentComplexity = matchesComplexityLevel(listOfComponentsValue,currentComplexityCount);
-                if(isCurrentComplexity){
+            while (currentComplexityCount > 0) {
+                log.info("Checking if complexity is matching at level : " + currentComplexityCount);
+                boolean isCurrentComplexity = matchesComplexityLevel(listOfComponentsValue, currentComplexityCount);
+                if (isCurrentComplexity) {
                     closetsClosetInner.setComplexity(String.valueOf(currentComplexityCount));
                     return;
                 }
