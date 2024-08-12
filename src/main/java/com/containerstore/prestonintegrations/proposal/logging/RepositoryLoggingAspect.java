@@ -15,6 +15,6 @@ public class RepositoryLoggingAspect {
 
     @Before("execution(* com.containerstore.prestonintegrations.proposal.repository..*(..))")
     public void logAfterRepositoryCall(JoinPoint joinPoint) {
-        logger.info("Fetching data from my db: {}", joinPoint.getSignature().toShortString());
+        logger.info("Fetching data from db: {}", joinPoint.getSignature().toShortString());
     }
 }
